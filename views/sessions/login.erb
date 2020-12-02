@@ -1,0 +1,64 @@
+<style>
+body{
+    background-size: contain;
+    background-image: url(https://cdn.lowgif.com/full/75e60567a306058d-.gif)
+    
+}
+
+header{
+    text-align: center;
+    margin-top: 5%;
+    color: white;
+}
+main{
+    display: flex;
+    justify-content: center;
+    margin-top: 15%;
+    border: 2px double white;
+    width: 20%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 15%;
+    color: white;
+}
+
+footer{
+    display: flex;
+    justify-content: center;
+    margin-top: 20%;
+}
+.login{
+    display: flex;
+    justify-content: center;
+}
+
+</style>
+
+<header>
+    <h1> Welcome to the Gaming Forum </h1>
+</header>
+
+<main>
+    <form action="/sessions" method="POST">
+        <section class="username">
+            <label for="">Username = </label>
+            <input type="text" name="username">
+        </section>
+        <section class="password">
+            <label for="">Password = </label>
+            <input type="password" name="password">
+        </section>
+        <section class="login">
+            <button>Login</button>
+        </section>
+    
+    </form>
+    <section>
+       
+    </section>
+</main>
+
+<footer>
+ <a href="/users/new"><button>Create an account</button></a>
+
+</footer>

@@ -1,0 +1,33 @@
+<h1>Gaming forum</h1>
+
+<a href="/games/new">Add new post</a>
+
+
+<% if logged_in? %> <%# give you back a boolean %>
+    <h3>Welcome to the Gaming Forum <%= current_user()['username']%></h3>
+    <%# because we are passing it as a variable ?%>
+    <%# current_user() = akan dapatkan user%>
+    <%# function tak perlu pass thru locals sbb it is accessible in the views folder..%>
+    <%#{"id"=>"7",
+    "first_name"=>"Syafiq",
+    "last_name"=>"Imran",
+    "email"=>"hehe@gmail.com",
+    "password_digest"=>"$2a$12$vkN5pJ/14YH9rtC255evx.j1tQGv0caVOykNnU9uKly.djMnDK2yC"}
+    %>
+
+    <form action="/sessions" method="POST">
+        <input name="_method" value="delete" type="hidden">
+
+        <button>Log Out</button>
+    </form>
+    <%# will only show when they are logged in..%>
+<% end %>
+
+
+<% games.each do |game_item|%>
+    <h2><%= game_item["name"]%> </h2>
+    
+    
+    <img src="<%= game_item["image_url"]%>" alt="">
+<% end %>
+
