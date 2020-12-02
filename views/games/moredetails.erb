@@ -1,0 +1,23 @@
+<h1> <%= game_display['name'] %></h1>
+<% if current_user['id'] == '1' %>
+    <a href="/games/<%= game_display['name'] %>/edit"><button>Edit Post</button></a>
+    <form action="/games/<%= game_display['name'] %>" method="POST">
+        <input type="hidden" name="_method" value="delete">
+        <button>Delete Post</button>
+    </form>
+<% end %>
+
+<img src="<%= game_display['image_url']%>" alt="">
+<br>
+<br>
+<a href="/comments/<%= game_display['name'] %>/new"><button>Post comment</button></a>
+
+<% comments.each do |comment|%>
+    <h3><%= comment['comment_written']%> posted by <%= comment['comment_poster'] %></h3>
+<% end %>
+
+
+<br>
+<br>
+<br>
+<a href="/games"><button>Go back to main page</button></a>

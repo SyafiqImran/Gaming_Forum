@@ -7,8 +7,13 @@
     <label>Image URL:</label>
     <input name="game_image_url" type="text">
 
-    <label>Date of Post</label>
-    <input name="date_of_post" type="text">
-
+    
+    <input name="date_of_post" type="hidden" value="<%=Time.now.strftime("%d-%m-%y")%>">
+    
     <button>Create Post</button>
 </form>
+
+<br>
+<br>
+<br>
+<a href="/games"><button>Cancel</button></a>

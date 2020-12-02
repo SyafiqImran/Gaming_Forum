@@ -31,3 +31,5 @@ CREATE DATABASE gaming_forum_db;
 CREATE TABLE users(id SERIAL PRIMARY KEY, first_name TEXT, last_name TEXT, username TEXT, email TEXT, password_digest TEXT);
 
 CREATE TABLE games(id SERIAL PRIMARY KEY, name TEXT, image_url TEXT, date_of_post TEXT);
+
+CREATE TABLE comments(id SERIAL PRIMARY KEY, comment_written TEXT, comment_poster TEXT, game_name TEXT);

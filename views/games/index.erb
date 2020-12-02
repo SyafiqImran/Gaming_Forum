@@ -2,9 +2,12 @@
 
 <a href="/games/new">Add new post</a>
 
-
-<% if logged_in? %> <%# give you back a boolean %>
+<% if current_user['id'] == '1' %>
+    <h3>Welcome to the Gaming Forum <%= current_user()['username']%> (Admin)</h3>
+<% else%>
+ <%# give you back a boolean %>
     <h3>Welcome to the Gaming Forum <%= current_user()['username']%></h3>
+<%end%>
     <%# because we are passing it as a variable ?%>
     <%# current_user() = akan dapatkan user%>
     <%# function tak perlu pass thru locals sbb it is accessible in the views folder..%>
@@ -21,13 +24,14 @@
         <button>Log Out</button>
     </form>
     <%# will only show when they are logged in..%>
-<% end %>
+
 
 
 <% games.each do |game_item|%>
     <h2><%= game_item["name"]%> </h2>
-    
+    <h2>Date of Post = <%= game_item["date_of_post"]%> </h2>
     
     <img src="<%= game_item["image_url"]%>" alt="">
+    <br>
+    <a href="/games/<%= game_item['name'] %>"><button>More details</button></a>
 <% end %>
-
