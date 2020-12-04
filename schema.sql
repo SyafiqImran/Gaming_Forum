@@ -32,9 +32,10 @@ CREATE TABLE users(id SERIAL PRIMARY KEY, first_name TEXT, last_name TEXT, usern
 
 CREATE TABLE games(id SERIAL PRIMARY KEY, name TEXT, image_url TEXT, date_of_post TEXT, user_id INTEGER, username TEXT);
 
-CREATE TABLE comments(id SERIAL PRIMARY KEY, comment_written TEXT, user_id INTEGER, game_id INTEGER, username TEXT);
+CREATE TABLE comments(id SERIAL PRIMARY KEY, comment_written TEXT, user_id INTEGER, game_id INTEGER, username TEXT, time_of_post TEXT);
 
 CREATE TABLE likes(id SERIAL PRIMARY KEY, comment_id INTEGER, user_id INTEGER, game_id INTEGER, username TEXT);
+ALTER TABLE likes ADD CONSTRAINT comment_id_and_user_id UNIQUE (comment_id, user_id);
 
 ALTER TABLE likes ADD CONSTRAINT unique_post_id_and_user_id UNIQUE (post_id, user_id);
 
@@ -112,3 +113,5 @@ p {
     margin-inline-start: 0px;
     margin-inline-end: 0px;
 }
+
+

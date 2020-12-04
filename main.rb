@@ -76,17 +76,19 @@ end
 
 get '/games/:name' do
   game_name = params['name']
-  
+  username = current_user['username']
   game_chosen = run_sql("SELECT * FROM games WHERE name = '#{game_name}'")
   game_id = game_chosen.to_a[0]['id']
-  comments = run_sql("SELECT * FROM comments WHERE game_id = '#{game_id}'")
+  comments = run_sql("SELECT * FROM comments WHERE game_id = '#{game_id}'") #display comment
 
+  
   game = run_sql("SELECT * FROM games WHERE name = '#{game_name}'")
   game_display = game.to_a[0]
   
   erb :'/games/moredetails', locals:{
     game_display: game_display,
     comments: comments,
+
   }
 end
 
@@ -107,7 +109,7 @@ patch '/games/:name' do
   game_name = params['name']
   
   game_image_url = params['image_url']
-  date_of_post = Time.now.strftime("%d-%m-%y")+'(edited)'
+  date_of_post = Time.now.strftime("%c")+'(edited)'
   game = run_sql("UPDATE games SET name='#{game_name}', image_url ='#{game_image_url}', date_of_post = '#{date_of_post}'")
   
   redirect "/games/'#{game_name}'"
@@ -115,8 +117,11 @@ end
 
 delete '/games/:name' do
   game_name = params['name']
+  game = run_sql("SELECT * FROM games WHERE name = '#{game_name}'") 
+  game_id = game.to_a['id']
   run_sql("DELETE FROM games WHERE name = '#{game_name}'")
-
+  run_sql("DELETE FROM likes WHERE game_id = '#{game_id}'")
+  run_sql("DELETE FROM comments WHERE game_id = '#{game_id}'")
   redirect '/games'
 
 end
@@ -220,14 +225,16 @@ end
 
 post '/comments/:name' do
   comment_written = params['comment']
+  
   game_name = params['name']
   
   game_chosen = run_sql("SELECT * FROM games WHERE name = '#{game_name}'")
   game_id = game_chosen.to_a[0]['id']
   username = current_user['username'] #ni function yeeeeee
   user_id = current_user['id']
+  time_of_post = Time.now.strftime("%c")
   
-  run_sql("INSERT INTO comments(comment_written, user_id, game_id, username) VALUES('#{comment_written}','#{user_id}','#{game_id}','#{username}')")
+  run_sql("INSERT INTO comments(comment_written, user_id, game_id, username, time_of_post) VALUES('#{comment_written}','#{user_id}','#{game_id}','#{username}', '#{time_of_post}')")
   
   redirect '/games'
   # redirect '/games/' + game_name + ''
@@ -255,8 +262,8 @@ end
 patch '/comment/:id' do
   user_id = params['id']
   comment_written = params['comment_written']
-  
-  comment = run_sql("UPDATE comments SET comment_written='#{comment_written}' WHERE user_id='#{user_id}'")
+  time_of_post = Time.now.strftime("%c") + '(edited)'
+  comment = run_sql("UPDATE comments SET comment_written='#{comment_written}', time_of_post = '#{time_of_post}' WHERE user_id='#{user_id}'")
 
   redirect '/games'
 end
@@ -273,10 +280,27 @@ delete '/comments/:id' do
     run_sql("DELETE FROM comments WHERE game_id = '#{game_id}'")
     redirect '/games'
   else
-  comment_written = current_user()['id']
-  
-  run_sql("DELETE FROM comments WHERE user_id=#{comment_written};")
-  redirect '/games'
+    comment_written = current_user()['id']
+    
+    run_sql("DELETE FROM comments WHERE user_id=#{comment_written};")
+    redirect '/games'
   end
   
+end
+
+# Like Part
+
+post '/likes/:id' do
+  comment_written = params['id'] #comment written
+
+  comment = run_sql("SELECT * FROM comments WHERE comment_written = '#{comment_written}'")
+  comment_id = comment.to_a[0]['id']
+  game_id = comment.to_a[0]['game_id']
+  user_id = current_user['id']
+  username = current_user['username']
+  
+  
+  run_sql("INSERT INTO likes(comment_id, user_id, game_id, username) VALUES('#{comment_id}','#{user_id}','#{game_id}', '#{username}')")
+
+  redirect '/games'
 end

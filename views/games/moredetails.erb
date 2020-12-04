@@ -9,6 +9,8 @@
     main img{
         width: 50%;
     }
+    
+    
 </style>
 
 <header>
@@ -43,27 +45,34 @@
     </form>
 </main>
 <footer>
-    <% comments.each do |comment|%>
-        <p><%= comment['comment_written']%> posted by <%= comment['username'] %></p> <%# display comment%>
-        <% if current_user['id'] == '1' %> <%# only for Admin %>
-            
-            
-            <form action="/comments/<%= game_display['name'] %>" method="POST">
-                <input type="hidden" name="_method" value="delete">
-                <button>Delete Comment</button>
-            </form>
-        <% elsif comment['username'] == current_user['username']%> <%# only for the one that post the comment%>
-            
-            <a href="/comments/<%= comment['user_id'] %>/edit"><button>Edit Comment</button></a>
-            <form action="/comments/<%= game_display['name'] %>" method="POST">
-                <input type="hidden" name="_method" value="delete">
-                <button>Delete Comment</button>
-            </form>
+    <section class="komen">
+        <% comments.each do |comment|%>
+            <section class="comment">
+                <p><%= comment['comment_written']%> posted by <%= comment['username'] %> <%= comment['time_of_post']%> </p>
+
+                <%# display comment%>
+                <% if current_user['id'] == '1' %> <%# only for Admin %>
+                    
+                    
+                    <form action="/comments/<%= game_display['name'] %>" method="POST">
+                        <input type="hidden" name="_method" value="delete">
+                        <button>Delete Comment</button>
+                    </form>
+                <% elsif comment['username'] == current_user['username']%> <%# only for the one that post the comment%>
+                    
+                    <a href="/comments/<%= comment['user_id'] %>/edit"><button>Edit Comment</button></a>
+                    <form action="/comments/<%= game_display['name'] %>" method="POST">
+                        <input type="hidden" name="_method" value="delete">
+                        <button>Delete Comment</button>
+                    </form>
+                <% end %>
+                
+
+            </section>
+    
+        
         <% end %>
-        
-        
-        
-    <% end %>
+    </section>
 
 
     <br>
