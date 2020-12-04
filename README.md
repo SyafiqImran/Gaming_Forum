@@ -25,3 +25,7 @@ I tried to include a like system for post/comments but the issue was there will 
 
 Another problem was i am unable to redirect the page to the respective post when the user finished commenting..
 
+I consider this as a work in progress , so thanks for sharing your time. 
+
+Try it out https://sei01-gaming-forum-msi.herokuapp.com/
+
