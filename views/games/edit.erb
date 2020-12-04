@@ -1,0 +1,8 @@
+<h1>Edit Post</h1>
+
+<form action="/games/<%= game_display['name'] %>" method="POST">
+    <input type="hidden" name="_method" value="patch">
+    <input type="text" name="name" value="<%= game_display['name'] %>">
+    <input type="text" name="image_url" value="<%= game_display['image_url'] %>">
+    <button>Update Game</button>
+</form>

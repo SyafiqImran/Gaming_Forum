@@ -1,23 +1,69 @@
-<h1>Create an Account</h1>
+<style>
+body{
+    background-size: cover;
+    background-position: center;
+    background-image: url(https://lh3.googleusercontent.com/proxy/r7Nn-DsIp1CDTK9qcJy2nc0yumy92QueoV1JKqpMCeHcJLxrP4fSbp7RcW7pbkcfhuDbbkNpUiVSVFPTuyH04QhO7c2dRutRB01SanqKm4k8dyzLAA);
+}
+    
 
-<form action="/users" method="POST">
-    <label for="">First Name = </label>
-    <input type="text" name="first_name">
+header{
+    text-align: center;
+    margin-top: 5%;
+    color: black;
+}
+main{
+    margin-top: 15%;
+    border: 2px double black;
+    width: 30%;
+    margin-right: auto;
+    margin-left: auto;
+    margin-bottom: 15%;
+    color: black;
+    background-color: pink;
+}
 
-    <label for="">Last Name = </label>
-    <input type="text" name="last_name">
-
-    <label for="">Email = </label>
-    <input type="text" name="email">
-
-    <label for="">Username = </label>
-    <input type="text" name="username">
-
-    <label for="">Password = </label>
-    <input type="password" name="password">
+footer{
+    display: flex;
+    justify-content: center;
+    margin-top: 20%;
+}
+form{
+    display: inline;
+   
+}
 
 
-    <button>Submit</button>
+</style>
 
 
-</form>
+<header>
+    <h1>Create an Account</h1>
+</header>
+<main>
+    <form action="/users" method="POST">
+        <label for="">First Name = </label>
+        <input type="text" name="first_name">
+        <br>
+        <label for="">Last Name = </label>
+        <input type="text" name="last_name">
+        <br>
+        <label for="">Email = </label>
+        <input type="email" name="email">
+        <br>
+        <label for="">Username = </label>
+        <input type="text" name="username">
+        <br>
+        <label for="">Password = </label>
+        <input type="password" name="password">
+        <br>
+        <label for="">Profile Picture Url = </label>
+        <input type="text" name="profile_picture">
+        <br>
+        <button>Submit</button>
+
+
+    </form>
+</main>
+<footer>
+    <a href="/"><button>Cancel</button></a>
+</footer>

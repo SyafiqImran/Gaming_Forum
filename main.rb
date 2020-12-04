@@ -33,12 +33,15 @@ def current_user
     user_id = session[:user_id]
     users = run_sql("SELECT * FROM users WHERE id= #{user_id}")
     user = user_found(users)
-    
     return user
   else
     return nil
   end
 end
+
+
+
+
 # only gonna use current_user if someone is logged in..
 
 # Games part
@@ -59,9 +62,13 @@ end
 post '/games' do
   game_name = params['game_name']
   game_image_url = params['game_image_url']
-  game_date_of_post = params['date_of_post']
-  testing = params['testing']
-  run_sql("INSERT INTO games(name, image_url, date_of_post) VALUES('#{game_name}','#{game_image_url}','#{game_date_of_post}')")
+  game_date_of_post = Time.now.strftime("%c")
+  username = current_user['username']
+  user_id = current_user['user_id'].to_i
+  
+  
+  
+  run_sql("INSERT INTO games(name, image_url, date_of_post, username, user_id) VALUES('#{game_name}','#{game_image_url}','#{game_date_of_post}', '#{username}', '#{user_id}')")
   
 
   redirect '/games'
@@ -69,7 +76,10 @@ end
 
 get '/games/:name' do
   game_name = params['name']
-  comments = run_sql("SELECT * FROM comments WHERE game_name = '#{game_name}'")
+  
+  game_chosen = run_sql("SELECT * FROM games WHERE name = '#{game_name}'")
+  game_id = game_chosen.to_a[0]['id']
+  comments = run_sql("SELECT * FROM comments WHERE game_id = '#{game_id}'")
 
   game = run_sql("SELECT * FROM games WHERE name = '#{game_name}'")
   game_display = game.to_a[0]
@@ -79,6 +89,38 @@ get '/games/:name' do
     comments: comments,
   }
 end
+
+get '/games/:name/edit' do
+  game_name = params['name']
+  
+  game = run_sql("SELECT * FROM games WHERE name = '#{game_name}'")
+  game_display = game.to_a[0]
+
+  erb :'/games/edit', locals:{
+    game_display: game_display,
+
+  }
+
+end
+
+patch '/games/:name' do
+  game_name = params['name']
+  
+  game_image_url = params['image_url']
+  date_of_post = Time.now.strftime("%d-%m-%y")+'(edited)'
+  game = run_sql("UPDATE games SET name='#{game_name}', image_url ='#{game_image_url}', date_of_post = '#{date_of_post}'")
+  
+  redirect "/games/'#{game_name}'"
+end
+
+delete '/games/:name' do
+  game_name = params['name']
+  run_sql("DELETE FROM games WHERE name = '#{game_name}'")
+
+  redirect '/games'
+
+end
+
 
 
 # Users part
@@ -93,9 +135,10 @@ post '/users' do
   user_username = params['username']
   user_email = params['email']
   user_password = params['password']
+  user_profile_picture = params['profile_picture']
   password_digest = BCrypt::Password.create(user_password)
 
-  run_sql("INSERT INTO users(first_name, last_name, username, email, password_digest) VALUES('#{user_first_name}','#{user_last_name}','#{user_username}','#{user_email}','#{password_digest}')")
+  run_sql("INSERT INTO users(first_name, last_name, username, email, password_digest, profile_picture) VALUES('#{user_first_name}','#{user_last_name}','#{user_username}','#{user_email}','#{password_digest}','#{user_profile_picture}')")
 
   redirect '/users/done'
 
@@ -178,10 +221,62 @@ end
 post '/comments/:name' do
   comment_written = params['comment']
   game_name = params['name']
-  comment_poster = current_user['username'] #ni function yeeeeee
   
-  run_sql("INSERT INTO comments(comment_written, comment_poster, game_name) VALUES('#{comment_written}','#{comment_poster}','#{game_name}')")
+  game_chosen = run_sql("SELECT * FROM games WHERE name = '#{game_name}'")
+  game_id = game_chosen.to_a[0]['id']
+  username = current_user['username'] #ni function yeeeeee
+  user_id = current_user['id']
+  
+  run_sql("INSERT INTO comments(comment_written, user_id, game_id, username) VALUES('#{comment_written}','#{user_id}','#{game_id}','#{username}')")
+  
+  redirect '/games'
+  # redirect '/games/' + game_name + ''
+  # This page isn’t workinglocalhost didn’t send any data.
+   #ERR_EMPTY_RESPONSE
 
-  redirect "/games"
+  #redirect "/games/'#{game_name}'"
+  # This page isn’t workinglocalhost didn’t send any data.
+   #ERR_EMPTY_RESPONSE
 
+end
+
+get '/comments/:id/edit' do
+  user_id = params['id']
+  comment = run_sql("SELECT * FROM comments WHERE user_id = '#{user_id}'")
+  comment_written = comment[0]
+
+  erb :'/comments/edit', locals:{
+    comment_written: comment_written
+  }
+  
+end
+
+
+patch '/comment/:id' do
+  user_id = params['id']
+  comment_written = params['comment_written']
+  
+  comment = run_sql("UPDATE comments SET comment_written='#{comment_written}' WHERE user_id='#{user_id}'")
+
+  redirect '/games'
+end
+
+delete '/comments/:id' do
+
+  if current_user()['id'] == '1'
+    comments = run_sql("SELECT * FROM comments")
+    game_id = ''
+    comments.each do |comment|
+      game_id = comment['game_id']
+    end
+    
+    run_sql("DELETE FROM comments WHERE game_id = '#{game_id}'")
+    redirect '/games'
+  else
+  comment_written = current_user()['id']
+  
+  run_sql("DELETE FROM comments WHERE user_id=#{comment_written};")
+  redirect '/games'
+  end
+  
 end

@@ -1,19 +1,25 @@
-<h1>Create new post</h1>
+<style>
+main{
+    margin-top: 100px;
+}
 
-<form action="/games" method="POST">
-    <label>Name</label>
-    <input name="game_name" type="text" >
+</style>
 
-    <label>Image URL:</label>
-    <input name="game_image_url" type="text">
+<header>
+    <h1>Create new post</h1>
+</header>
+<main>
+    <form action="/games" method="POST">
+        <label>Name</label>
+        <input name="game_name" type="text" >
 
-    
-    <input name="date_of_post" type="hidden" value="<%=Time.now.strftime("%d-%m-%y")%>">
-    
-    <button>Create Post</button>
-</form>
+        <label>Image URL:</label>
+        <input name="game_image_url" type="text">
+        <button>Create Post</button>
+    </form>
 
-<br>
-<br>
-<br>
-<a href="/games"><button>Cancel</button></a>
+    <br>
+    <br>
+    <br>
+    <a href="/games"><button>Cancel</button></a>
+</main>
